@@ -1,31 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Login</h1>
-    {% if user.is_authenticated %}
-    authnenticated
-    {% endif %}
-    {% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-    <div class="field-error">
-        <p>{{error}}</p>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <form action="{% url "login" %}" method="POST">
-        {% csrf_token %}
-        <label for="">User Name</label>
-        {{form.username}}
-        <label for="">Password</label>
-        {{form.password}}
-        <button type="submit">Login</button>
-    </form>
-    <p>If you dont have avvount yet</p>
-    <a href="{% url "register" %}">Register</a>
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<h1>Login</h1>
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<div class="field-error">
+    <p>{{error}}</p>
+</div>
+{% endfor %}
+{% endif %}
+<form action="{% url "login" %}" method="POST">
+    {% csrf_token %}
+    <label for="">User Name</label>
+    {{form.username}}
+    <label for="">Password</label>
+    {{form.password}}
+    <button type="submit">Login</button>
+</form>
+<p>If you dont have avvount yet</p>
+<a href="{% url "register" %}">Register</a>
+{% endblock %}
