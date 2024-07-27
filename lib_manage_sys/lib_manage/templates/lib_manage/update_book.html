@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="updateBook">
+    <div class="updateBook-text">
+        <p>Update Book</p>
+    </div>
+    <div class="updateBook-inner">
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="field-error">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form action="{% url 'update-book-confirm' %}" method="POST">
+            {% csrf_token %}
+            {{ form.name|as_crispy_field }}
+            {{ form.author|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            <input type="hidden" name="book_id" value="{{ book_id }}">
+            <button type="submit" class="btn btn-primary">Update Book</button>
+        </form>
+        <br>
+    </div>
+</div>
+{% endblock %}

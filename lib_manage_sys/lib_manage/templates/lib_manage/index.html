@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 
-
 {% block content %}
+<form action="{% url 'search'%}" method="GET">
+    <input type="search" name="name" >
+    <button type="Search" class="btn btn-primary">Search</button>
+</form>
+<div class="book-container" id="all-books">
+    {% for book in books %}
+        <div class="book-card">
+            <h3>{{ book.name }}</h3>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Category:</strong> {{ book.get_category_display }}</p>
+        </div>
+    {% empty %}
+        <p>No books available.</p>
+    {% endfor %}
+</div>
 {% endblock %}

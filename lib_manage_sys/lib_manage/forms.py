@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from .models import Book,UserReg
 
 # Create your models here.
 
@@ -38,3 +39,15 @@ class NewUserRegForm(UserCreationForm):
             raise forms.ValidationError("Password don't match")
         return password2
         
+
+
+class addBookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['name', 'author', 'category']
+
+
+class userRegForm(forms.ModelForm):
+    class Meta:
+        model = UserReg
+        fields = ['name', 'address', 'id_num', 'gender']

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="book-container" id="all-books">
+    {% for searched_book in searched_books %}
+        <div class="book-card">
+            <h3>{{ searched_book.name }}</h3>
+            <p><strong>Author:</strong> {{ searched_book.author }}</p>
+            <p><strong>Category:</strong> {{ searched_book.get_category_display }}</p>
+            <button type="Search" class="btn btn-primary" onclick="confirmDelete({{ searched_book.id }})">Delete</button>
+            <button type="Search" class="btn btn-primary" onclick="confirmUpdate({{ searched_book.id }})">Update</button>
+            <button type="Search" class="btn btn-primary" onclick="confirmGet({{ searched_book.id }})">Get</button>
+        </div>
+    {% empty %}
+        <p>No books available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+
+
+{% block additional_script %}
+<script>
+    function confirmDelete(id){
+        if(confirm("Are you sure")){
+            $.ajax({
+                url : "{% url 'delete-book' 0 %}".replace('0', id), 
+                type : 'POST',
+                data : {
+                    'id': id,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+                },
+                success: function(response) {
+                    alert('Item deleted successfully');
+                    window.location.href = "{% url 'home' %}";
+                },
+                error: function(error) {
+                    alert('Error deleting item');
+                }
+            });
+        }
+    }
+</script>
+
+<script>
+    function confirmUpdate(id){
+        window.location.href = "{% url 'update-book' 0 %}".replace('0', id)
+    }
+</script>
+{% endblock %}

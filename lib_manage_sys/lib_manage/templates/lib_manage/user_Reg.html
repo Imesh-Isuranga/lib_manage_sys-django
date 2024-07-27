@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="userReg">
+    <div class="userReg-text">
+        <p>Register User</p>
+    </div>
+    <div class="userReg-inner">
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="field-error">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form action="{% url 'user-reg' %}" method="POST">
+            {% csrf_token %}
+            {{ form.name|as_crispy_field }}
+            {{ form.address|as_crispy_field }}
+            {{ form.id_num|as_crispy_field }}
+            {{ form.gender|as_crispy_field }}
+            <button type="submit" class="btn btn-primary">Register Book</button>
+        </form>
+        <br>
+    </div>
+</div>
+{% endblock %}

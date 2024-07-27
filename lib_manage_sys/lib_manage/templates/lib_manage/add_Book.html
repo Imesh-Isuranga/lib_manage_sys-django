@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="addBook">
+    <div class="addBook-text">
+        <p>Register Book</p>
+    </div>
+    <div class="addBook-inner">
+        {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+        <div class="field-error">
+            <p>{{ error }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form action="{% url 'addBook' %}" method="POST">
+            {% csrf_token %}
+            {{ form.name|as_crispy_field }}
+            {{ form.author|as_crispy_field }}
+            {{ form.category|as_crispy_field }}
+            <button type="submit" class="btn btn-primary">Register Book</button>
+        </form>
+        <br>
+    </div>
+</div>
+{% endblock %}
