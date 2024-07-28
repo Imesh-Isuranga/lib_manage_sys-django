@@ -7,9 +7,24 @@
             <h3>{{ searched_book.name }}</h3>
             <p><strong>Author:</strong> {{ searched_book.author }}</p>
             <p><strong>Category:</strong> {{ searched_book.get_category_display }}</p>
+            <p><strong>QTY:</strong> {{ searched_book.qty }}</p>
             <button type="Search" class="btn btn-primary" onclick="confirmDelete({{ searched_book.id }})">Delete</button>
             <button type="Search" class="btn btn-primary" onclick="confirmUpdate({{ searched_book.id }})">Update</button>
-            <button type="Search" class="btn btn-primary" onclick="confirmGet({{ searched_book.id }})">Get</button>
+            {% if searched_book.qty > 0 %}
+            {% if book_id == searched_book.id|stringformat:"s" %}
+            {% if error_message %}
+                <div class="alert alert-danger">
+                    {{ error_message }}
+                </div>
+            {% endif %}
+            {% endif %}
+            <form action="{% url 'get-book'%}" method="POST">
+                {% csrf_token %}
+                <input type="text" name="user_Id" >
+                <input type="hidden" name="book_Id" value="{{ searched_book.id }}">
+                <button type="Search" class="btn btn-primary">Add</button>
+            </form>
+            {% endif %}
         </div>
     {% empty %}
         <p>No books available.</p>
@@ -26,7 +41,6 @@
                 url : "{% url 'delete-book' 0 %}".replace('0', id), 
                 type : 'POST',
                 data : {
-                    'id': id,
                     'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
                 },
                 success: function(response) {
@@ -43,7 +57,10 @@
 
 <script>
     function confirmUpdate(id){
-        window.location.href = "{% url 'update-book' 0 %}".replace('0', id)
+        window.location.href = "{% url 'addBook' 0 %}".replace('0', id)
     }
 </script>
+
+
+
 {% endblock %}

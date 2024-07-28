@@ -44,7 +44,7 @@ class NewUserRegForm(UserCreationForm):
 class addBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['name', 'author', 'category']
+        fields = ['name', 'author', 'category','qty']
 
 
 class userRegForm(forms.ModelForm):

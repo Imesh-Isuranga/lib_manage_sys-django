@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form id="search-form" action="{% url 'handover' %}" method="POST">
+    {% csrf_token %}
+    <input type="text" name="user_id" >
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+{% for userGetBook in userGetBooks %}
+
+<div class="card">
+    <div class="card-header">
+        {{ userGetBook.book.name }}
+    </div>
+    <div class="card-body">
+        <form action="{% url 'handover-delete'%}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" value="{{ userGetBook.book.id }}" name="book_Id">
+            <input type="hidden" value="{{ userGetBook.user.id }}" name="user_Id">
+            <button type="submit" class="btn btn-primary">HandOver</button>
+        </form>
+    </div>
+</div>
+<br>
+
+{% empty %}
+    <p>No books available.</p>
+{% endfor %}
+
+
+{% endblock %}
+
+{% block additional_script %}
+
+{% endblock %}

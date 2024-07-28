@@ -15,11 +15,12 @@
         </div>
         {% endfor %}
         {% endif %}
-        <form action="{% url 'update-book-confirm' %}" method="POST">
+        <form action="" method="POST">
             {% csrf_token %}
             {{ form.name|as_crispy_field }}
             {{ form.author|as_crispy_field }}
             {{ form.category|as_crispy_field }}
+            {{ form.qty|as_crispy_field }}
             <input type="hidden" name="book_id" value="{{ book_id }}">
             <button type="submit" class="btn btn-primary">Update Book</button>
         </form>

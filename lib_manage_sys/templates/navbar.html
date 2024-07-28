@@ -16,7 +16,7 @@
                     <a class="nav-link" href="{% url 'user-reg' %}">Register-User</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">HandOver</a>
+                    <a class="nav-link" href="{% url 'handover' %}">HandOver</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item dropdown">

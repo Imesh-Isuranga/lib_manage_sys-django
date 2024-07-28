@@ -1,10 +1,11 @@
-from django.http import JsonResponse
+from pyexpat.errors import messages
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import NewUserRegForm,addBookForm,userRegForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import Book
+from .models import Book, UserGetBooks, UserReg
 
 
 # Create your views here.
@@ -30,16 +31,26 @@ def registerView(request):
     context={'form':form}
     return render(request, 'registration/register.html', context)
 
-def addBookView(request):
+def addBookView(request,id=0):
     if request.method == 'POST':
-        form = addBookForm(request.POST)
+        if id==0:
+            form = addBookForm(request.POST)
+        else:
+            book = get_object_or_404(Book, id=request.POST.get('book_id'))
+            form = addBookForm(request.POST,instance=book)
         if form.is_valid():
             form.save()
-            return redirect('home')
+        return redirect('home') 
     else:
-        form = addBookForm()
+        if id==0:
+            form = addBookForm()
+            return render(request,'lib_manage/Add_Book.html',{'form':form})
+        else:
+            book = get_object_or_404(Book, id=id)
+            form = addBookForm(instance=book)
+            return render(request, 'lib_manage/update_book.html', {'form': form, 'book_id': book.id})
 
-    return render(request,'lib_manage/Add_Book.html',{'form':form})
+
 
 def searchBook(request):
     if request.method == 'GET':
@@ -56,23 +67,6 @@ def deleteBook(request,id):
     else:
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
-def updateBook(request, id):
-    book = get_object_or_404(Book, id=id)
-    form = addBookForm(instance=book)
-    return render(request, 'lib_manage/update_book.html', {'form': form, 'book_id': book.id})
-
-    
-        
-def updateBookConfirm(request):
-    if request.method == 'POST':
-        book = get_object_or_404(Book, id=request.POST.get('book_id'))
-        form = addBookForm(request.POST,instance=book)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    else:
-        return redirect('home')
         
 def user_reg(request):
     if request.method == 'POST':
@@ -85,3 +79,73 @@ def user_reg(request):
 
     return render(request,'lib_manage/user_Reg.html',{'form':form})
 
+
+def getBook(request):
+    if request.method == 'POST':
+        user_reg_num  = request.POST.get('user_Id')
+        book_id = request.POST.get('book_Id')
+        print(book_id)
+        
+        try:
+            user = UserReg.objects.get(reg_num=user_reg_num)
+        except UserReg.DoesNotExist:
+            context = {
+                'error_message': "User not found. Please check the registration number.",
+                'searched_books': Book.objects.all(),  # You may want to adjust this based on your actual use case
+                'book_id':book_id
+            }
+            return render(request, 'lib_manage/search.html', context)
+       
+        book = get_object_or_404(Book, id=book_id)
+        UserGetBooks.objects.create(book=book, user=user)
+
+        book = Book.objects.get(id=book_id)
+        book.qty = book.qty-1
+        book.save()
+
+        return redirect('home')
+    else:
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def handover(request):
+    user_ID = request.POST.get('user_id')
+    if not user_ID:
+        print("No user ID provided.")
+        return render(request, 'lib_manage/hand_over.html')
+
+    try:
+        user = UserReg.objects.get(reg_num=user_ID)
+        userGetBooks = UserGetBooks.objects.filter(user=user)
+        print(f"Found {userGetBooks.count()} books for user {user.name}.")
+    except UserReg.DoesNotExist:
+        print("User not found.")
+        userGetBooks = []  # Empty list if user not found
+
+    context = {
+        'userGetBooks': userGetBooks
+    }
+    return render(request, 'lib_manage/hand_over.html', context)
+
+
+def handoverDelete(request):
+    if request.method == 'POST':
+        book_id = request.POST.get('book_Id')
+        user_id = request.POST.get('user_Id')
+        print(book_id)
+        print(user_id)
+
+        if book_id and user_id:
+            try:
+                user_get_book = UserGetBooks.objects.filter(book_id=book_id, user_id=user_id)
+                user_get_book.delete()
+                book = Book.objects.get(id=book_id)
+                book.qty = book.qty+1
+                book.save();
+                return redirect('handover')
+            except UserGetBooks.DoesNotExist:
+                return HttpResponseBadRequest("The record does not exist.")
+        else:
+            return HttpResponseBadRequest("Invalid data.")
+    else:
+        return HttpResponseBadRequest("Invalid request method.")

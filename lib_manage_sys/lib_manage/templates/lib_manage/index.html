@@ -11,6 +11,7 @@
             <h3>{{ book.name }}</h3>
             <p><strong>Author:</strong> {{ book.author }}</p>
             <p><strong>Category:</strong> {{ book.get_category_display }}</p>
+            <p><strong>QTY:</strong> {{ book.qty }}</p>
         </div>
     {% empty %}
         <p>No books available.</p>

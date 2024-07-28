@@ -23,6 +23,7 @@ class Book(models.Model):
         choices=CATEGORY_CHOICES,
         default='adventure',
     )
+    qty = models.IntegerField(default=1)
 
     def __str__(self):
         return self.name
