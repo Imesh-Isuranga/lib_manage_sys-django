@@ -1,10 +1,21 @@
 {% extends "base.html" %}
+{% load static %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "lib_manage/index.css" %}">
+{% endblock %}
+
 
 {% block content %}
-<form action="{% url 'search'%}" method="GET">
-    <input type="search" name="name" >
-    <button type="Search" class="btn btn-primary">Search</button>
-</form>
+<div class="search-bar">
+    <div class="search">
+        <form action="{% url 'search'%}" method="GET" class="form">
+            <input class="search-input" type="search" name="name" placeholder="Enter Book Name">
+            <button type="Search" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
 <div class="book-container" id="all-books">
     {% for book in books %}
         <div class="book-card">

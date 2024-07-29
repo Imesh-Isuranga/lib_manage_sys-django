@@ -1,3 +1,43 @@
+.search-bar {
+    width: 100vw;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search {
+    width: 70%;
+    height: 100%;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
+.search-input {
+    border: 1px solid rgb(66, 63, 63);
+    border-radius: 3em;
+    width: 60%; /* Adjust width to fit the design */
+    padding: 0.5em; /* Add some padding for better appearance */
+    margin-right: 10px; /* Space between input and button */
+}
+
+button {
+    padding: 0.5em 1em; /* Adjust padding for better appearance */
+    border-radius: 5em;
+    border: none;
+    background-color: #007bff; /* Adjust button color */
+    color: white;
+    cursor: pointer;
+}
+
+.form{
+    width: 100%;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
 .book-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

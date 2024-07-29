@@ -1,5 +1,5 @@
 from pyexpat.errors import messages
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import NewUserRegForm,addBookForm,userRegForm
@@ -72,8 +72,23 @@ def user_reg(request):
     if request.method == 'POST':
         form = userRegForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            id_num = form.cleaned_data['id_num']
+            try:
+                user = UserReg.objects.get(id_num=id_num)
+                html_content = '''
+                <html>
+                <body>
+                    <p style="font-size: 30px;">User is already registered.Try Another</p>
+                    <br>
+                    <a href="" class="btn btn-primary">Go to Home</a>
+                </body>
+                </html>
+                '''
+                return HttpResponse(html_content)   
+            except:
+                form.save()
+                user = UserReg.objects.get(id_num=id_num)
+                return render(request,'lib_manage/user_Id.html',{'user_id':user.reg_num})      
     else:
         form = userRegForm()
 
@@ -141,7 +156,7 @@ def handoverDelete(request):
                 user_get_book.delete()
                 book = Book.objects.get(id=book_id)
                 book.qty = book.qty+1
-                book.save();
+                book.save()
                 return redirect('handover')
             except UserGetBooks.DoesNotExist:
                 return HttpResponseBadRequest("The record does not exist.")
@@ -149,3 +164,10 @@ def handoverDelete(request):
             return HttpResponseBadRequest("Invalid data.")
     else:
         return HttpResponseBadRequest("Invalid request method.")
+    
+
+def logout(request):
+    return render(request, 'lib_manage/login.html')
+    
+
+

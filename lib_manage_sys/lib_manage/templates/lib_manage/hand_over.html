@@ -1,12 +1,25 @@
 {% extends "base.html" %}
+{% load static %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "lib_manage/hand_over.css" %}">
+{% endblock %}
+
 
 {% block content %}
-<form id="search-form" action="{% url 'handover' %}" method="POST">
-    {% csrf_token %}
-    <input type="text" name="user_id" >
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<div class="search-bar">
+    <div class="search">
+        <form id="search-form" action="{% url 'handover' %}" method="POST"  class="form">
+            {% csrf_token %}
+            <input class="search-input" type="text" name="user_id" placeholder="Enter User_Id">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+</div>
 
+<hr>
+<br>
 {% for userGetBook in userGetBooks %}
 
 <div class="card">

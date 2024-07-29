@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "lib_manage/add_book.css" %}">
+{% endblock %}
+
 
 {% block content %}
 <div class="addBook">

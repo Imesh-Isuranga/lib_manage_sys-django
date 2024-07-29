@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 
 {% load crispy_forms_tags %}
+{% load static %}
 
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "registration/register.css" %}">
+{% endblock %}
 
 {% block content %}
 <div class="register">
@@ -10,7 +15,7 @@
   </div>
 
   <div class="register-inner">
-    <form method="post" class="form">
+    <form method="post" class="form" class="form">
       {% csrf_token %}
 
       {{form.username |as_crispy_field }}

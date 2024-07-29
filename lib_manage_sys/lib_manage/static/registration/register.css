@@ -7,6 +7,28 @@
     justify-content: center;
 }
 
+.register-inner{
+    width: 50vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Optional: add padding for better spacing */
+    box-sizing: border-box; /* Ensure padding and border are included in width and height */
+}
+
+.form .form-group {
+    width: 100%; /* Ensure form group takes the full width */
+    margin-bottom: 20px; /* Optional: add spacing between fields */
+}
+
 .register-text{
     width: 100%;
     height: auto;

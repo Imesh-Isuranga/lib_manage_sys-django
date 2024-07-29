@@ -1,4 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "lib_manage/search.css" %}">
+{% endblock %}
+
 
 {% block content %}
 <div class="book-container" id="all-books">

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+{% block extracss %}
+<link rel="stylesheet" href="{% static "lib_manage/user_Id.css" %}">
+{% endblock %}
+
+<div class="main-wrap">
+    <div class="title"><p>User Id</p></div>
+    <br>
+    <div class="user_id"><p>{{user_id}}</p></div>
+    <br>
+    <a class="btn btn-primary" aria-current="page" href="{% url 'home' %}">Home</a>
+</div>
+
+{% endblock %}
