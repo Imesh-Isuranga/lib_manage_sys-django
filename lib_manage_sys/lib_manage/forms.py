@@ -50,4 +50,4 @@ class addBookForm(forms.ModelForm):
 class userRegForm(forms.ModelForm):
     class Meta:
         model = UserReg
-        fields = ['name', 'address', 'id_num', 'gender']
+        fields = ['name', 'address', 'id_num','email' ,'gender']

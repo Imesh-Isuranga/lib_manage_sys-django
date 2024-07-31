@@ -16,6 +16,25 @@
         </form>
     </div>
 </div>
+
+<div class="container dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select Category
+    </button>
+    <div class="dropdown-menu" aria-labelledby="Select_Category">
+      <a class="dropdown-item" href="{% url 'filter' 'adventure' %}">Adventure</a>
+      <a class="dropdown-item" href="{% url 'filter' 'kids' %}">Children\'s Books</a>
+      <a class="dropdown-item" href="{% url 'filter' 'classics' %}">Classics</a>
+      <a class="dropdown-item" href="{% url 'filter' 'comics' %}">Comics and Graphic Novels</a>
+      <a class="dropdown-item" href="{% url 'filter' 'fantasy' %}">Fantasy</a>
+      <a class="dropdown-item" href="{% url 'filter' 'horror' %}">Horror</a>
+      <a class="dropdown-item" href="{% url 'filter' 'historical' %}">Historical Fiction</a>
+      <a class="dropdown-item" href="{% url 'filter' 'literary' %}">Literary Fiction</a>
+      <a class="dropdown-item" href="{% url 'filter' 'mystery' %}">Mystery</a>
+      <a class="dropdown-item" href="{% url 'filter' 'non_Fiction' %}">Non-Fiction</a>
+    </div>
+  </div>
+
 <div class="book-container" id="all-books">
     {% for book in books %}
         <div class="book-card">

@@ -11,5 +11,7 @@ urlpatterns = [
     path("user-reg/", views.user_reg, name="user-reg"),
     path("get-book/", views.getBook, name="get-book"),
     path("handover-book/", views.handover, name="handover"),
-    path("handover-delete/", views.handoverDelete, name="handover-delete")
+    path("handover-delete/", views.handoverDelete, name="handover-delete"),
+    path("send-email/", views.send_email, name="send-email"),
+    path("filter/<str:category>/", views.filter, name="filter")
 ]

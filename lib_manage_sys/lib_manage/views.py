@@ -1,4 +1,5 @@
 from pyexpat.errors import messages
+from django.dispatch import receiver
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -6,6 +7,12 @@ from .forms import NewUserRegForm,addBookForm,userRegForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .models import Book, UserGetBooks, UserReg
+from django.core.mail import BadHeaderError, send_mail
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.signals import user_logged_in
+from datetime import datetime, timedelta
+
+
 
 
 # Create your views here.
@@ -56,7 +63,7 @@ def searchBook(request):
     if request.method == 'GET':
         name = request.GET.get('name')
         searched_books = Book.objects.filter(name__icontains=name)
-        context = {'searched_books': searched_books, 'name': name}
+        context = {'searched_books': searched_books}
         return render(request, 'lib_manage/search.html', context)
 
 
@@ -103,6 +110,16 @@ def getBook(request):
         
         try:
             user = UserReg.objects.get(reg_num=user_reg_num)
+            print(UserGetBooks.objects.filter(user=user).count())
+            print(UserGetBooks.objects.filter(user=user).count())
+            print(UserGetBooks.objects.filter(user=user).count())
+            if UserGetBooks.objects.filter(user=user).count()>1:
+                context = {
+                    'error_message': "He already has got 2 books",
+                    'searched_books': Book.objects.all(),  # You may want to adjust this based on your actual use case
+                    'book_id':book_id
+                }
+                return render(request, 'lib_manage/search.html', context)
         except UserReg.DoesNotExist:
             context = {
                 'error_message': "User not found. Please check the registration number.",
@@ -168,6 +185,33 @@ def handoverDelete(request):
 
 def logout(request):
     return render(request, 'lib_manage/login.html')
+
+@receiver(user_logged_in)
+def send_email(sender, request, user, **kwargs):
+    try:
+        handOverDate = (datetime.now() + timedelta(days=2)).date()
+        usergetbooks = UserGetBooks.objects.all()
+        for i in usergetbooks:
+            if handOverDate == i.dueDate:
+                user1 = UserGetBooks.objects.filter(user=i.user)
+                for userTemp in user1:
+                    if not (i.emailStatus):
+                        toEmail = UserReg.objects.get(reg_num=i.user.reg_num).email
+                        send_mail("This is Subject", "This is message", "imeshisuranga00@gmail.com", [toEmail],fail_silently=False,)
+                        i.emailStatus = True
+                        i.save()
+    except BadHeaderError:
+        return HttpResponse("Invalid header found.")
+    return HttpResponseRedirect("/contact/thanks/")
+
+
+def filter(request,category):
+    print(category)
+    searched_books = Book.objects.filter(category=category)
+    context = {'searched_books': searched_books}
+    return render(request, 'lib_manage/search.html', context)
+
+    
     
 
 

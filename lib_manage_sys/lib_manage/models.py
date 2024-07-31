@@ -1,6 +1,8 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import pre_save
+from datetime import datetime, timedelta
+
 
 class Book(models.Model):
     CATEGORY_CHOICES = [
@@ -42,6 +44,7 @@ class UserReg(models.Model):
         default='male',
     )
     reg_num = models.CharField(max_length=20, unique=True, blank=True, null=False)
+    email = models.EmailField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -59,9 +62,16 @@ def generate_reg_num(sender, instance, **kwargs):
         instance.reg_num = f"{prefix}{last_id + 1:04d}"
 
 class UserGetBooks(models.Model):
+
+    def two_weeks_from_today():
+        return datetime.now() + timedelta(weeks=2)
+    
     created_at = models.DateTimeField(auto_now_add=True)  # Automatically set to now when created
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='user_get_books')
     user = models.ForeignKey(UserReg, on_delete=models.CASCADE, related_name='user_get_books')
+    dueDate = models.DateField(default=two_weeks_from_today)
+    emailStatus = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.user.name} - {self.book.name}"
