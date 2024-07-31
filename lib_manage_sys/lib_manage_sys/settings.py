@@ -134,7 +134,7 @@ EMAIL_USE_TLS = True
 # EMAIL_HOST_USER is the email: 'example@gmail.com'
 EMAIL_HOST_USER = 'imeshisuranga00@gmail.com'
 # EMAIL_HOST_PASSWORD is the 16 digit 'app password': 'twexamplexpcuhuy'
-EMAIL_HOST_PASSWORD = "mhgpwtlclxbodsji"
+EMAIL_HOST_PASSWORD = "#######"
 
 
 # Default primary key field type
